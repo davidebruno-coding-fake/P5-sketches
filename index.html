@@ -1,1 +1,103 @@
-<h1> Hello </h1>
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+
+<script src="https://cdn.jsdelivr.net/npm/p5@1.4.2/lib/p5.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <div id="prova">
+    
+  </div>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+  <!--<script src="../p5.js"></script>-->
+  <!-- <script src="../addons/p5.sound.js"></script> -->
+  <script>
+    let z = [];
+    let q = [];
+    let x = 0;
+    let y = 0;
+
+    let num = 15;
+    let fillet = 5;
+    let numLerp = 0.005;
+
+    function windowResized() {
+      resizeCanvas(windowWidth, windowHeight);
+    }
+
+    function setup() {
+      var canvasDiv = document.getElementById('prova');
+      var width = canvasDiv.offsetWidth;
+      var height = canvasDiv.offsetHeight;
+      var sketchCanvas = createCanvas(width,height);
+      sketchCanvas.parent("prova");
+      sketchCanvas.position(0,0);
+      //canvas.style("z-index", "-1");
+      for (let i = 0; i < num; i++) {
+        z.push(i);
+        q.push(i);
+      }
+    }
+
+    function draw() {
+      background(220);
+      strokeWeight(1);
+      noFill();
+      noCursor();
+
+      for (let i = 0; i < z.length; i++) {
+        //queste due linee sotto per aggiungere animazioni onda non sono usate
+        let zo = cos(frameCount * 0.06 + i * 0.3) * 5;
+        let qo = sin(frameCount * 0.06 + i * 0.3) * 5;
+
+        push();
+        let widthX = map(z[i], 0, num, windowWidth, -num);
+        let heightY = map(q[i], 0, num, windowHeight, -num);
+
+        x = lerp(x, mouseX + zo, numLerp);
+        y = lerp(y, mouseY + qo, numLerp);
+
+        if (mouseIsPressed == true) {
+          for (let i = 0; i < num; i++) {
+            stroke(10 * i); // White
+          }
+        } else {
+          stroke(0); // Black
+        }
+
+        rect(
+          (x * q[i]) / num,
+          (y * q[i]) / num,
+          widthX,
+          heightY,
+          fillet,
+          fillet,
+          fillet,
+          fillet
+        );
+        pop();
+      }
+
+      push();
+      fill(0);
+      x = lerp(x, mouseX, numLerp);
+      y = lerp(y, mouseY, numLerp);
+      ellipse(x, y, 30, 30);
+      pop();
+    }
+
+  </script>
+</head>
+
+<body>
+  <main>
+  </main>
+</body>
+
+</html>
